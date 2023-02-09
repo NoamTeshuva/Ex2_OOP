@@ -27,9 +27,10 @@ public class Ex2_1 {
             File file = new File(namingFilesWithNum + ".txt");
             PrintWriter writer = new PrintWriter(file);
             int x = rand.nextInt(bound);
-            String writerInput = ("Yovel and Noam Assignment_2_OOP \r\n");
+            String writerInput = "";
+            String string =  ("Yovel and Noam Assignment_2_OOP \r\n");
             for (int j = 0; j < x; j++) {
-                writerInput = writerInput + writerInput;
+                writerInput += string;
             }
             writer.println(writerInput);
             writer.close();
@@ -49,7 +50,7 @@ public class Ex2_1 {
         } catch (Exception e) {
             e.getStackTrace();
         }
-        return numOfLines;
+        return numOfLines-1;
     }
 
     /**
@@ -63,7 +64,7 @@ public class Ex2_1 {
         for (int i = 0; i < fileNames.length; i++) {
             numOfLines = numOfLines + readSumFile(fileNames[i]);
         }
-        return numOfLines - fileNames.length;
+        return numOfLines;
     }
 
 
@@ -97,7 +98,7 @@ public class Ex2_1 {
      * @return the number of lines in the files
      */
     public static int getNumOfLinesThreads(String[] fileNames) {
-        int count = fileNames.length, i = 0, numOfLines = 0;
+        int count = fileNames.length, i = 0,j=0, numOfLines = 0;
         fileThread[] arr = new fileThread[count];
         while (i < count) {
             fileThread file = new fileThread(fileNames[i]);
@@ -106,14 +107,15 @@ public class Ex2_1 {
             i++;
         }
         i = 0;
-        while (i < count) {
+        while (j < count) {
             try {
-                arr[i].join();
-            } catch (InterruptedException e) {
+                arr[j].join();
+            }
+            catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            numOfLines = numOfLines + arr[i].getLineCount();
-            i++;
+            numOfLines  += arr[j].getLineCount();
+            j++;
         }
         return numOfLines;
     }
@@ -145,6 +147,7 @@ public class Ex2_1 {
      */
     public static int getNumOfLinesThreadPool(String[] fileNames) throws ExecutionException, InterruptedException {
         int poolSize = fileNames.length;
+//        int poolSize = fileNames.length/10;
         ExecutorService executor = Executors.newFixedThreadPool(poolSize);
         List<Future<Integer>> futures = new ArrayList<>();
         for (String fileName : fileNames) {
@@ -157,37 +160,30 @@ public class Ex2_1 {
             sumOfLines += future.get();
         }
         executor.shutdownNow();
-        return sumOfLines - fileNames.length;
+        return sumOfLines ;
     }
 
-    public static void main(String[] args) throws
-            FileNotFoundException, UnsupportedEncodingException, ExecutionException, InterruptedException {
-        String[] fileNames = Ex2_1.createTextFiles(500, 4, 20);
-
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, ExecutionException, InterruptedException {
+        String[] fileNames = Ex2_1.createTextFiles(10, 3, 4);
         // Measure the execution time of the getNumOfLines() method
         long startTime = System.currentTimeMillis();
         int numOfLines = Ex2_1.getNumOfLines(fileNames);
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
-        System.out.println("Elapsed time for getNumOfLines(): " + elapsedTime + " milliseconds");
-
+        System.out.println("Elapsed time for getNumOfLines(): " + elapsedTime + " milliseconds ,num of lines: "+numOfLines);
 
         // Measure the execution time of the getNumOfLinesThreads() method
         startTime = System.currentTimeMillis();
         int numOfLinesThreads = Ex2_1.getNumOfLinesThreads(fileNames);
         endTime = System.currentTimeMillis();
         elapsedTime = endTime - startTime;
-        System.out.println("Elapsed time for getNumOfLinesThreads(): " + elapsedTime + " milliseconds");
+        System.out.println("Elapsed time for getNumOfLines(): " + elapsedTime + " milliseconds ,num of lines: "+numOfLinesThreads);
 
         // Measure the execution time of the getNumOfLinesThreadPool() method
         startTime = System.currentTimeMillis();
         int numOfLinesThreadPool = Ex2_1.getNumOfLinesThreadPool(fileNames);
         endTime = System.currentTimeMillis();
         elapsedTime = endTime - startTime;
-        System.out.println("Elapsed time for getNumOfLinesThreadPool(): " + elapsedTime + " milliseconds");
-
-
+        System.out.println("Elapsed time for getNumOfLines(): " + elapsedTime + " milliseconds ,num of lines: "+numOfLinesThreadPool);
     }
 }
-
-

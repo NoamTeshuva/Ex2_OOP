@@ -11,7 +11,7 @@ import java.util.concurrent.FutureTask;
  * @param <T> the type of the task
  */
 public class Task<T> extends FutureTask<T> implements Comparable<Runnable> {
-    private Callable operation;
+    private Callable <T> operation;
     private TaskType type;
 
     /**
@@ -63,7 +63,7 @@ public class Task<T> extends FutureTask<T> implements Comparable<Runnable> {
      *
      * @return the callable object associated with the task
      */
-    public Callable getOperation() {
+    public Callable <T> getOperation() {
         return operation;
     }
 

@@ -14,7 +14,7 @@ public class CustomExecutor extends ThreadPoolExecutor {
     public static PriorityBlockingQueue<Runnable> tasks = new PriorityBlockingQueue<>();
 
 
-    private int currMax;
+    private volatile int  currMax;
     private ArrayList<Integer> listOfPriority;
 
     /**

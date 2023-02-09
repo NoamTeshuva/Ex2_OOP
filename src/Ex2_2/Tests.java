@@ -10,6 +10,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 public class Tests {
     public static final Logger logger = LoggerFactory.getLogger(Tests.class);
+    {}
+
+
+
 
     @Test
     public void partialTest() {
